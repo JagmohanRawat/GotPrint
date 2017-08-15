@@ -1,0 +1,10 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+    
+dbConfig:
+    username: root
+    password: ''
+    url: jdbc:mysql://localhost:3306/test
+    driver: com.mysql.jdbc.Driver
