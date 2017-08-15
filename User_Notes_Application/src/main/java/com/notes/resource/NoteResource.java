@@ -16,9 +16,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.auth.UserCredential;
 import com.notes.db.NoteRepository;
 import com.notes.entity.NoteDetailsTo;
 import com.notes.entity.NoteTo;
+
+import io.dropwizard.auth.Auth;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,7 +31,7 @@ public class NoteResource {
 	@RolesAllowed("ADMIN")
 	@Path("/note-create/{userId}")
 	@POST
-	public Response create(@Valid NoteTo noteTo, @Valid @Min(value=1) @PathParam("userId")int id) {
+	public Response create(@Valid NoteTo noteTo, @Valid @Min(value=1) @PathParam("userId")int id,@Auth UserCredential user) {
 		try {
 			noteRepo.create(noteTo, id);
 			return Response.ok().build();

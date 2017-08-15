@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.auth.UserCredential;
 import com.notes.db.UserRepository;
 import com.notes.entity.UserDetailsTo;
 import com.notes.entity.UserTo;
@@ -30,7 +31,7 @@ public class UserResource {
 	@RolesAllowed("USER")
 	@Path("/user-create")
 	@POST
-	public Response create(@Valid  UserTo userTo) {
+	public Response create(@Valid  UserTo userTo,@Auth UserCredential user) {
 		try {
 			userRepo.create(userTo);
 			return Response.ok().build();
@@ -44,7 +45,7 @@ public class UserResource {
 	@RolesAllowed("ADMIN")
 	@Path("/user-update/{id}")
 	@PUT
-	public Response update(@Valid UserTo userTo, @Valid @Min(value = 1) @PathParam("id") int id) {
+	public Response update(@Valid UserTo userTo, @Valid @Min(value = 1) @PathParam("id") int id,@Auth UserCredential user) {
 		try {
 			int rowsUpdated = userRepo.update(userTo, id);
 			if (rowsUpdated <= 0) {
@@ -61,7 +62,7 @@ public class UserResource {
 	@RolesAllowed("ADMIN")
 	@Path("/user-delete/{id}")
 	@DELETE
-	public Response delete(@Valid @Min(value = 1) @PathParam("id") int id) {
+	public Response delete(@Valid @Min(value = 1) @PathParam("id") int id,@Auth UserCredential use) {
 		try {
 			Object user = userRepo.delete(id);
 			if (user == null) {
@@ -78,7 +79,7 @@ public class UserResource {
 	@RolesAllowed("ADMIN")
 	@Path("/user-find/{id}")
 	@GET
-	public Response find(@Valid @Min(value = 1) @PathParam("id") int id) {
+	public Response find(@Valid @Min(value = 1) @PathParam("id") int id,@Auth UserCredential user) {
 		try {
 			UserDetailsTo userDetails = userRepo.find(id);
 			if (userDetails == null) {
@@ -95,7 +96,7 @@ public class UserResource {
 	@RolesAllowed("ADMIN")
 	@Path("/user-find-all")
 	@GET
-	public Response findAll() {
+	public Response findAll(@Auth UserCredential user) {
 		try {
 			List<UserDetailsTo> userDetails = userRepo.findAll();
 			return Response.ok(userDetails).build();
